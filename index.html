@@ -12,30 +12,45 @@
 <meta name="apple-mobile-web-app-title" content="Van Stock">
 <style>
   :root {
-    --bg:       #0f1117;
-    --surface:  #1a1d27;
-    --border:   #2a2d3a;
-    --accent:   #f0a500;
-    --accent2:  #e05c00;
-    --text:     #e8eaf0;
-    --muted:    #7a7f96;
-    --danger:   #c0392b;
-    --green:    #27ae60;
-    --radius:   10px;
-    --font:     'Inter', system-ui, -apple-system, sans-serif;
+    --bg:      #0f1117;
+    --surface: #1a1d27;
+    --border:  #2a2d3a;
+    --accent:  #f0a500;
+    --accent2: #e05c00;
+    --text:    #e8eaf0;
+    --muted:   #7a7f96;
+    --danger:  #c0392b;
+    --green:   #27ae60;
+    --radius:  10px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text); font-family: system-ui,-apple-system,sans-serif; min-height: 100dvh; padding-bottom: 90px; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font);
-    min-height: 100dvh;
-    padding-bottom: 80px;
+  /* SETUP BANNER */
+  #setupBanner {
+    background: #1a1200;
+    border-bottom: 2px solid var(--accent);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--accent);
+  }
+  #setupBanner button {
+    margin-left: auto;
+    padding: 6px 14px;
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    color: #000;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
   }
 
-  /* ── HEADER ── */
+  /* HEADER */
   header {
     background: var(--surface);
     border-bottom: 2px solid var(--accent);
@@ -48,354 +63,96 @@
     justify-content: space-between;
     gap: 12px;
   }
-
   .header-left { display: flex; align-items: center; gap: 10px; }
-
-  .logo-icon {
-    width: 34px; height: 34px;
-    background: var(--accent);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  h1 {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text);
-    line-height: 1;
-  }
+  .logo-icon { width: 34px; height: 34px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  h1 { font-size: 18px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; line-height: 1; }
   h1 span { color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .header-stats { font-size: 11px; color: var(--muted); text-align: right; line-height: 1.4; }
+  .sync-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--muted); font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .sync-btn.syncing { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  .header-stats {
-    font-size: 11px;
-    color: var(--muted);
-    text-align: right;
-    line-height: 1.4;
-  }
-  .header-stats strong { color: var(--accent); font-size: 13px; }
-
-  /* ── SEARCH + FILTER ── */
-  .toolbar {
-    padding: 12px 16px;
-    display: flex;
-    gap: 8px;
-  }
-
-  .search-wrap {
-    position: relative;
-    flex: 1;
-  }
-  .search-wrap svg {
-    position: absolute;
-    left: 10px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
-    pointer-events: none;
-  }
-
-  input[type="text"], input[type="number"], select, textarea {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text);
-    font-family: var(--font);
-    font-size: 14px;
-    padding: 10px 12px;
-    width: 100%;
-    outline: none;
-    transition: border-color 0.15s;
-    -webkit-appearance: none;
-  }
-  input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-    border-color: var(--accent);
-  }
+  /* TOOLBAR */
+  .toolbar { padding: 12px 16px; display: flex; gap: 8px; }
+  .search-wrap { position: relative; flex: 1; }
+  .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  input, select { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: inherit; font-size: 14px; padding: 10px 12px; width: 100%; outline: none; -webkit-appearance: none; }
+  input:focus, select:focus { border-color: var(--accent); }
   .search-wrap input { padding-left: 34px; }
 
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7f96' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 28px;
-    cursor: pointer;
-  }
-
-  /* ── CATEGORY PILLS ── */
-  .cat-pills {
-    display: flex;
-    gap: 6px;
-    padding: 0 16px 12px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
+  /* PILLS */
+  .cat-pills { display: flex; gap: 6px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
   .cat-pills::-webkit-scrollbar { display: none; }
+  .pill { flex-shrink: 0; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); font-size: 12px; font-weight: 600; cursor: pointer; background: transparent; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+  .pill.active { background: var(--accent); border-color: var(--accent); color: #000; }
 
-  .pill {
-    flex-shrink: 0;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    background: transparent;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .pill.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #000;
-  }
-
-  /* ── ITEM CARDS ── */
-  .list {
-    padding: 0 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 4px 10px;
-    align-items: start;
-    position: relative;
-    transition: border-color 0.15s;
-  }
-  .card:active { border-color: var(--accent); }
-  .card.low-stock { border-left: 3px solid var(--danger); }
+  /* CARDS */
+  .list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+  .section-label { padding: 8px 0 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: start; }
+  .card.low-stock  { border-left: 3px solid var(--danger); }
   .card.good-stock { border-left: 3px solid var(--green); }
+  .card-cat  { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); grid-column: 1; }
+  .card-name { font-size: 15px; font-weight: 600; grid-column: 1; line-height: 1.3; }
+  .card-note { font-size: 12px; color: var(--muted); grid-column: 1; }
+  .card-actions { grid-column: 1; display: flex; gap: 8px; margin-top: 6px; }
+  .action-btn { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; }
+  .qty-wrap { grid-column: 2; grid-row: 1 / 5; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 2px; }
+  .qty-btn { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .qty-btn:active { background: var(--accent); color: #000; }
+  .qty-num { font-size: 20px; font-weight: 800; min-width: 36px; text-align: center; }
+  .qty-num.low { color: var(--danger); }
+  .card-unit { font-size: 10px; color: var(--muted); text-align: center; }
 
-  .card-cat {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    grid-column: 1;
-  }
+  /* FAB */
+  .fab { position: fixed; bottom: 24px; right: 20px; width: 56px; height: 56px; border-radius: 16px; background: var(--accent); border: none; color: #000; font-size: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(240,165,0,.4); z-index: 200; font-weight: 700; }
 
-  .card-name {
-    font-size: 15px;
-    font-weight: 600;
-    grid-column: 1;
-    line-height: 1.3;
-  }
-
-  .card-note {
-    font-size: 12px;
-    color: var(--muted);
-    grid-column: 1;
-  }
-
-  .card-qty-wrap {
-    grid-column: 2;
-    grid-row: 1 / 4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding-top: 2px;
-  }
-
-  .qty-btn {
-    width: 30px; height: 30px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 18px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: background 0.1s, border-color 0.1s;
-    line-height: 1;
-    padding-bottom: 1px;
-  }
-  .qty-btn:active { background: var(--accent); border-color: var(--accent); color: #000; }
-
-  .qty-display {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--text);
-    min-width: 36px;
-    text-align: center;
-    line-height: 1;
-  }
-  .qty-display.low { color: var(--danger); }
-
-  .card-unit {
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-  }
-
-  .card-actions {
-    grid-column: 1;
-    display: flex;
-    gap: 8px;
-    margin-top: 6px;
-  }
-
-  .action-btn {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 5px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .action-btn.edit:active { background: var(--accent); border-color: var(--accent); color: #000; }
-  .action-btn.del:active { background: var(--danger); border-color: var(--danger); color: #fff; }
-
-  /* ── EMPTY STATE ── */
-  .empty {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--muted);
-  }
+  /* EMPTY */
+  .empty { text-align: center; padding: 60px 24px; color: var(--muted); }
   .empty-icon { font-size: 48px; margin-bottom: 12px; }
-  .empty p { font-size: 14px; line-height: 1.6; }
 
-  /* ── FAB ── */
-  .fab {
-    position: fixed;
-    bottom: 24px;
-    right: 20px;
-    width: 56px; height: 56px;
-    border-radius: 16px;
-    background: var(--accent);
-    border: none;
-    color: #000;
-    font-size: 28px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(240,165,0,0.4);
-    transition: transform 0.15s, background 0.15s;
-    z-index: 200;
-    font-weight: 700;
-  }
-  .fab:active { transform: scale(0.93); background: var(--accent2); }
+  /* TOAST */
+  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; font-size: 13px; color: var(--text); z-index: 500; opacity: 0; transition: opacity .3s; pointer-events: none; white-space: nowrap; }
+  #toast.show { opacity: 1; }
 
-  /* ── MODAL ── */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 300;
-    display: flex;
-    align-items: flex-end;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .modal {
-    background: var(--surface);
-    border-top: 2px solid var(--accent);
-    border-radius: 16px 16px 0 0;
-    padding: 20px 16px 36px;
-    width: 100%;
-    transform: translateY(100%);
-    transition: transform 0.25s cubic-bezier(0.32,0.72,0,1);
-  }
+  /* OVERLAY / MODAL */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 300; display: flex; align-items: flex-end; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--surface); border-top: 2px solid var(--accent); border-radius: 16px 16px 0 0; padding: 20px 16px 40px; width: 100%; transform: translateY(100%); transition: transform .25s cubic-bezier(.32,.72,0,1); max-height: 90dvh; overflow-y: auto; }
   .overlay.open .modal { transform: translateY(0); }
-
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .modal-title {
-    font-size: 16px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .close-btn {
-    width: 30px; height: 30px;
-    border-radius: 8px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-size: 18px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-  }
-
-  .field {
-    margin-bottom: 12px;
-  }
-  .field label {
-    display: block;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--muted);
-    margin-bottom: 5px;
-  }
-
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .modal-title { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .close-btn { width: 30px; height: 30px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); color: var(--muted); font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 5px; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  select { padding-right: 28px; cursor: pointer; }
+  .save-btn { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: var(--radius); color: #000; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; margin-top: 8px; }
 
-  .save-btn {
-    width: 100%;
-    padding: 14px;
-    background: var(--accent);
-    border: none;
-    border-radius: var(--radius);
-    color: #000;
-    font-size: 15px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    cursor: pointer;
-    margin-top: 8px;
-    transition: background 0.15s;
-  }
-  .save-btn:active { background: var(--accent2); }
-
-  /* ── SECTION HEADER ── */
-  .section-label {
-    padding: 8px 16px 4px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-  }
+  /* SETUP MODAL extras */
+  .setup-note { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .setup-note a { color: var(--accent); }
+  .setup-steps { font-size: 12px; color: var(--muted); line-height: 2; margin-bottom: 12px; padding-left: 4px; }
+  .setup-steps li { margin-bottom: 2px; }
 </style>
 </head>
 <body>
 
+<div id="setupBanner" style="display:none">
+  ⚡ Connect to Google Sheets to sync your inventory
+  <button onclick="openSetup()">Set Up</button>
+</div>
+
 <header>
   <div class="header-left">
     <div class="logo-icon">⚡</div>
-    <div>
-      <h1>Van <span>Stock</span></h1>
-    </div>
+    <h1>Van <span>Stock</span></h1>
   </div>
-  <div class="header-stats" id="headerStats">— items</div>
+  <div class="header-right">
+    <button class="sync-btn" id="syncBtn" title="Sync now" onclick="syncNow()">↻</button>
+    <div class="header-stats" id="headerStats">— items</div>
+  </div>
 </header>
 
 <div class="toolbar">
@@ -408,39 +165,29 @@
 </div>
 
 <div class="cat-pills" id="catPills"></div>
-
 <div class="list" id="itemList"></div>
+<button class="fab" onclick="openAdd()">+</button>
+<div id="toast"></div>
 
-<button class="fab" id="addBtn" title="Add item">+</button>
-
-<!-- ADD / EDIT MODAL -->
-<div class="overlay" id="overlay">
+<!-- ITEM MODAL -->
+<div class="overlay" id="itemOverlay">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-title" id="modalTitle">Add Item</span>
-      <button class="close-btn" id="closeBtn">×</button>
+      <button class="close-btn" onclick="closeModal()">×</button>
     </div>
-
     <div class="field">
       <label>Item Name</label>
       <input type="text" id="fName" placeholder="e.g. Cat6 Cable" autocomplete="off">
     </div>
-
     <div class="row2">
       <div class="field">
         <label>Category</label>
         <select id="fCat">
-          <option value="Cable">Cable</option>
-          <option value="Connectors">Connectors</option>
-          <option value="Power">Power</option>
-          <option value="Tools">Tools</option>
-          <option value="Access Control">Access Control</option>
-          <option value="Camera">Camera</option>
-          <option value="Alarm">Alarm</option>
-          <option value="Network">Network</option>
-          <option value="Hardware">Hardware</option>
-          <option value="Consumables">Consumables</option>
-          <option value="Other">Other</option>
+          <option>Cable</option><option>Connectors</option><option>Power</option>
+          <option>Tools</option><option>Access Control</option><option>Camera</option>
+          <option>Alarm</option><option>Network</option><option>Hardware</option>
+          <option>Consumables</option><option>Other</option>
         </select>
       </div>
       <div class="field">
@@ -448,7 +195,6 @@
         <input type="text" id="fUnit" placeholder="ft, ea, box…" autocomplete="off">
       </div>
     </div>
-
     <div class="row2">
       <div class="field">
         <label>Qty on Hand</label>
@@ -459,269 +205,300 @@
         <input type="number" id="fLow" placeholder="e.g. 5" min="0">
       </div>
     </div>
-
     <div class="field">
       <label>Notes (optional)</label>
       <input type="text" id="fNote" placeholder="Part #, location in van, supplier…" autocomplete="off">
     </div>
+    <button class="save-btn" onclick="saveItem()">Save Item</button>
+  </div>
+</div>
 
-    <button class="save-btn" id="saveBtn">Save Item</button>
+<!-- SETUP MODAL -->
+<div class="overlay" id="setupOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Connect Google Sheets</span>
+      <button class="close-btn" onclick="closeSetup()">×</button>
+    </div>
+    <p class="setup-note">
+      Your inventory will be saved to a Google Sheet you own — free, permanent, and accessible from any device.
+    </p>
+    <ol class="setup-steps">
+      <li>Go to <strong>script.google.com</strong></li>
+      <li>Create a new project</li>
+      <li>Paste the Apps Script code (see instructions)</li>
+      <li>Click <strong>Deploy → New deployment</strong></li>
+      <li>Choose <strong>Web app</strong>, set access to <strong>Anyone</strong></li>
+      <li>Copy the Web App URL and paste it below</li>
+    </ol>
+    <div class="field">
+      <label>Google Apps Script Web App URL</label>
+      <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+    </div>
+    <button class="save-btn" onclick="saveScriptUrl()">Save & Connect</button>
   </div>
 </div>
 
 <script>
-  // ── DATA ──────────────────────────────────────────────
-  const STORE_KEY = 'vanInventory_v1';
+const STORE_KEY  = 'vanInventory_v1';
+const SCRIPT_KEY = 'vanScriptUrl';
 
-  function load() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
-    catch { return []; }
-  }
+let items = [];
+let editId = null;
+let activeCat = 'All';
+let searchQ = '';
+let scriptUrl = localStorage.getItem(SCRIPT_KEY) || '';
 
-  function save(items) {
-    localStorage.setItem(STORE_KEY, JSON.stringify(items));
-  }
+// ── LOCAL STORAGE ─────────────────────────────────────
+function loadLocal() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+  catch { return []; }
+}
+function saveLocal() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(items));
+}
 
-  let items = load();
-  let editId = null;
-  let activeCategory = 'All';
-  let searchQuery = '';
+// ── GOOGLE SHEETS SYNC ────────────────────────────────
+async function fetchFromSheet() {
+  if (!scriptUrl) return null;
+  try {
+    const res = await fetch(scriptUrl + '?action=get');
+    const data = await res.json();
+    return data.items || null;
+  } catch { return null; }
+}
 
-  // ── CATEGORIES ────────────────────────────────────────
-  function getCategories() {
-    const cats = [...new Set(items.map(i => i.category))].sort();
-    return ['All', ...cats];
-  }
-
-  // ── RENDER ────────────────────────────────────────────
-  function render() {
-    renderPills();
-    renderList();
-    renderStats();
-  }
-
-  function renderPills() {
-    const pills = document.getElementById('catPills');
-    const cats = getCategories();
-    pills.innerHTML = cats.map(c => `
-      <button class="pill ${c === activeCategory ? 'active' : ''}" data-cat="${c}">${c}</button>
-    `).join('');
-    pills.querySelectorAll('.pill').forEach(p => {
-      p.addEventListener('click', () => {
-        activeCategory = p.dataset.cat;
-        render();
-      });
+async function pushToSheet(payload) {
+  if (!scriptUrl) return;
+  try {
+    await fetch(scriptUrl, {
+      method: 'POST',
+      body: JSON.stringify(payload),
     });
-  }
+  } catch {}
+}
 
-  function renderList() {
-    const list = document.getElementById('itemList');
-    let filtered = items;
-
-    if (activeCategory !== 'All') {
-      filtered = filtered.filter(i => i.category === activeCategory);
-    }
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      filtered = filtered.filter(i =>
-        i.name.toLowerCase().includes(q) ||
-        i.category.toLowerCase().includes(q) ||
-        (i.note || '').toLowerCase().includes(q)
-      );
-    }
-
-    if (filtered.length === 0) {
-      list.innerHTML = `
-        <div class="empty">
-          <div class="empty-icon">📦</div>
-          <p>${items.length === 0
-            ? 'Your van stock is empty.<br>Tap <strong>+</strong> to add your first item.'
-            : 'No items match your search.'}</p>
-        </div>`;
-      return;
-    }
-
-    // Group by category
-    const groups = {};
-    filtered.forEach(i => {
-      if (!groups[i.category]) groups[i.category] = [];
-      groups[i.category].push(i);
-    });
-
-    let html = '';
-    Object.keys(groups).sort().forEach(cat => {
-      html += `<div class="section-label">${cat}</div>`;
-      groups[cat].forEach(item => {
-        const isLow = item.lowStock > 0 && item.qty <= item.lowStock;
-        const isGood = item.qty > item.lowStock;
-        const stockClass = isLow ? 'low-stock' : (isGood && item.lowStock > 0 ? 'good-stock' : '');
-        const qtyClass = isLow ? 'low' : '';
-        html += `
-          <div class="card ${stockClass}" data-id="${item.id}">
-            <div class="card-cat">${item.category}</div>
-            <div class="card-name">${esc(item.name)}</div>
-            ${item.note ? `<div class="card-note">${esc(item.note)}</div>` : ''}
-            <div class="card-actions">
-              <button class="action-btn edit" data-id="${item.id}">Edit</button>
-              <button class="action-btn del" data-id="${item.id}">Delete</button>
-            </div>
-            <div class="card-qty-wrap">
-              <button class="qty-btn" data-id="${item.id}" data-delta="1">+</button>
-              <div class="qty-display ${qtyClass}">${item.qty}</div>
-              <div class="card-unit">${item.unit || 'ea'}</div>
-              <button class="qty-btn" data-id="${item.id}" data-delta="-1">−</button>
-            </div>
-          </div>`;
-      });
-    });
-
-    list.innerHTML = html;
-
-    list.querySelectorAll('.qty-btn').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        adjustQty(btn.dataset.id, parseInt(btn.dataset.delta));
-      });
-    });
-    list.querySelectorAll('.action-btn.edit').forEach(btn => {
-      btn.addEventListener('click', () => openEdit(btn.dataset.id));
-    });
-    list.querySelectorAll('.action-btn.del').forEach(btn => {
-      btn.addEventListener('click', () => deleteItem(btn.dataset.id));
-    });
-  }
-
-  function renderStats() {
-    const totalItems = items.length;
-    const lowItems = items.filter(i => i.lowStock > 0 && i.qty <= i.lowStock).length;
-    const el = document.getElementById('headerStats');
-    el.innerHTML = `<strong>${totalItems}</strong> items${lowItems ? ` · <span style="color:var(--danger)">${lowItems} low</span>` : ''}`;
-  }
-
-  function esc(str) {
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  // ── ACTIONS ──────────────────────────────────────────
-  function adjustQty(id, delta) {
-    const item = items.find(i => i.id === id);
-    if (!item) return;
-    item.qty = Math.max(0, item.qty + delta);
-    save(items);
+async function syncNow() {
+  if (!scriptUrl) { openSetup(); return; }
+  const btn = document.getElementById('syncBtn');
+  btn.classList.add('syncing');
+  const sheetItems = await fetchFromSheet();
+  if (sheetItems) {
+    items = sheetItems;
+    saveLocal();
     render();
+    toast('Synced with Google Sheets ✓');
+  } else {
+    toast('Could not reach Google Sheets');
   }
+  btn.classList.remove('syncing');
+}
 
-  function deleteItem(id) {
-    const item = items.find(i => i.id === id);
-    if (!item) return;
-    if (!confirm(`Delete "${item.name}"?`)) return;
-    items = items.filter(i => i.id !== id);
-    save(items);
-    render();
+async function pushAndSave() {
+  saveLocal();
+  await pushToSheet({ action: 'set', items });
+}
+
+// ── INIT ──────────────────────────────────────────────
+async function init() {
+  items = loadLocal();
+  if (!scriptUrl) {
+    document.getElementById('setupBanner').style.display = 'flex';
   }
-
-  // ── MODAL ─────────────────────────────────────────────
-  function openAdd() {
-    editId = null;
-    document.getElementById('modalTitle').textContent = 'Add Item';
-    document.getElementById('fName').value = '';
-    document.getElementById('fCat').value = 'Cable';
-    document.getElementById('fUnit').value = '';
-    document.getElementById('fQty').value = '';
-    document.getElementById('fLow').value = '';
-    document.getElementById('fNote').value = '';
-    document.getElementById('overlay').classList.add('open');
-    setTimeout(() => document.getElementById('fName').focus(), 300);
-  }
-
-  function openEdit(id) {
-    const item = items.find(i => i.id === id);
-    if (!item) return;
-    editId = id;
-    document.getElementById('modalTitle').textContent = 'Edit Item';
-    document.getElementById('fName').value = item.name;
-    document.getElementById('fCat').value = item.category;
-    document.getElementById('fUnit').value = item.unit || '';
-    document.getElementById('fQty').value = item.qty;
-    document.getElementById('fLow').value = item.lowStock || '';
-    document.getElementById('fNote').value = item.note || '';
-    document.getElementById('overlay').classList.add('open');
-  }
-
-  function closeModal() {
-    document.getElementById('overlay').classList.remove('open');
-  }
-
-  function saveItem() {
-    const name = document.getElementById('fName').value.trim();
-    if (!name) { document.getElementById('fName').focus(); return; }
-
-    const data = {
-      name,
-      category: document.getElementById('fCat').value,
-      unit: document.getElementById('fUnit').value.trim() || 'ea',
-      qty: parseInt(document.getElementById('fQty').value) || 0,
-      lowStock: parseInt(document.getElementById('fLow').value) || 0,
-      note: document.getElementById('fNote').value.trim(),
-    };
-
-    if (editId) {
-      const idx = items.findIndex(i => i.id === editId);
-      if (idx >= 0) items[idx] = { ...items[idx], ...data };
-    } else {
-      data.id = Date.now().toString(36) + Math.random().toString(36).slice(2);
-      items.push(data);
-    }
-
-    save(items);
-    closeModal();
-    render();
-  }
-
-  // ── SEED DATA (first launch) ──────────────────────────
-  function maybeSeed() {
-    if (items.length > 0) return;
-    const seed = [
-      { name: 'Cat6 Cable', category: 'Cable', unit: 'ft', qty: 500, lowStock: 100, note: 'Blue, bulk spool' },
-      { name: '18/2 Wire', category: 'Cable', unit: 'ft', qty: 200, lowStock: 50, note: 'Access control' },
-      { name: 'RJ45 Connectors', category: 'Connectors', unit: 'ea', qty: 50, lowStock: 20 },
-      { name: 'Butt Connectors', category: 'Connectors', unit: 'ea', qty: 30, lowStock: 10 },
-      { name: 'Wire Lugs', category: 'Connectors', unit: 'ea', qty: 20, lowStock: 5 },
-      { name: 'Maglite AAA', category: 'Consumables', unit: 'ea', qty: 4, lowStock: 2 },
-      { name: 'Zip Ties 8"', category: 'Consumables', unit: 'ea', qty: 100, lowStock: 25 },
-      { name: 'Proximity Cards', category: 'Access Control', unit: 'ea', qty: 10, lowStock: 5 },
-      { name: 'Mercury LP1501', category: 'Access Control', unit: 'ea', qty: 2, lowStock: 1, note: 'LP 1501 ASSA ABLOY' },
-    ];
-    seed.forEach(s => {
-      s.id = Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random();
-      s.note = s.note || '';
-      items.push(s);
-    });
-    save(items);
-  }
-
-  // ── EVENT LISTENERS ───────────────────────────────────
-  document.getElementById('addBtn').addEventListener('click', openAdd);
-  document.getElementById('closeBtn').addEventListener('click', closeModal);
-  document.getElementById('saveBtn').addEventListener('click', saveItem);
-
-  document.getElementById('overlay').addEventListener('click', e => {
-    if (e.target === document.getElementById('overlay')) closeModal();
-  });
-
-  document.getElementById('searchInput').addEventListener('input', e => {
-    searchQuery = e.target.value.trim();
-    render();
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-    if (e.key === 'Enter' && document.getElementById('overlay').classList.contains('open')) saveItem();
-  });
-
-  // ── INIT ──────────────────────────────────────────────
-  maybeSeed();
   render();
+  if (scriptUrl) {
+    // Sync in background on load
+    const sheetItems = await fetchFromSheet();
+    if (sheetItems) {
+      items = sheetItems;
+      saveLocal();
+      render();
+    }
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────
+function render() {
+  renderPills();
+  renderList();
+  renderStats();
+}
+
+function renderPills() {
+  const cats = ['All', ...[...new Set(items.map(i => i.category))].sort()];
+  document.getElementById('catPills').innerHTML = cats.map(c =>
+    `<button class="pill${c===activeCat?' active':''}" onclick="setCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function setCat(c) { activeCat = c; render(); }
+
+function renderList() {
+  const el = document.getElementById('itemList');
+  let filtered = items;
+  if (activeCat !== 'All') filtered = filtered.filter(i => i.category === activeCat);
+  if (searchQ) {
+    const q = searchQ.toLowerCase();
+    filtered = filtered.filter(i =>
+      i.name.toLowerCase().includes(q) ||
+      i.category.toLowerCase().includes(q) ||
+      (i.note||'').toLowerCase().includes(q)
+    );
+  }
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon">📦</div><p>${
+      items.length ? 'No items match your search.' : 'Van stock is empty.<br>Tap <strong>+</strong> to add your first item.'
+    }</p></div>`;
+    return;
+  }
+  const groups = {};
+  filtered.forEach(i => { (groups[i.category] = groups[i.category]||[]).push(i); });
+  el.innerHTML = Object.keys(groups).sort().map(cat => `
+    <div class="section-label">${cat}</div>
+    ${groups[cat].map(item => {
+      const isLow  = item.lowStock > 0 && item.qty <= item.lowStock;
+      const isGood = item.lowStock > 0 && item.qty  > item.lowStock;
+      return `
+        <div class="card${isLow?' low-stock':isGood?' good-stock':''}">
+          <div class="card-cat">${item.category}</div>
+          <div class="card-name">${esc(item.name)}</div>
+          ${item.note?`<div class="card-note">${esc(item.note)}</div>`:''}
+          <div class="card-actions">
+            <button class="action-btn" onclick="openEdit('${item.id}')">Edit</button>
+            <button class="action-btn" onclick="deleteItem('${item.id}')">Delete</button>
+          </div>
+          <div class="qty-wrap">
+            <button class="qty-btn" onclick="adj('${item.id}',1)">+</button>
+            <div class="qty-num${isLow?' low':''}">${item.qty}</div>
+            <div class="card-unit">${item.unit||'ea'}</div>
+            <button class="qty-btn" onclick="adj('${item.id}',-1)">−</button>
+          </div>
+        </div>`;
+    }).join('')}
+  `).join('');
+}
+
+function renderStats() {
+  const low = items.filter(i => i.lowStock>0 && i.qty<=i.lowStock).length;
+  document.getElementById('headerStats').innerHTML =
+    `<strong style="color:var(--accent)">${items.length}</strong> items${low?` · <span style="color:var(--danger)">${low} low</span>`:''}`;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── ACTIONS ───────────────────────────────────────────
+async function adj(id, delta) {
+  const item = items.find(i => i.id===id);
+  if (!item) return;
+  item.qty = Math.max(0, item.qty + delta);
+  render();
+  await pushAndSave();
+}
+
+async function deleteItem(id) {
+  const item = items.find(i => i.id===id);
+  if (!item || !confirm(`Delete "${item.name}"?`)) return;
+  items = items.filter(i => i.id!==id);
+  render();
+  await pushAndSave();
+}
+
+// ── ITEM MODAL ────────────────────────────────────────
+function openAdd() {
+  editId = null;
+  document.getElementById('modalTitle').textContent = 'Add Item';
+  ['fName','fUnit','fQty','fLow','fNote'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fCat').value = 'Cable';
+  document.getElementById('itemOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('fName').focus(), 300);
+}
+
+function openEdit(id) {
+  const item = items.find(i => i.id===id);
+  if (!item) return;
+  editId = id;
+  document.getElementById('modalTitle').textContent = 'Edit Item';
+  document.getElementById('fName').value  = item.name;
+  document.getElementById('fCat').value   = item.category;
+  document.getElementById('fUnit').value  = item.unit||'';
+  document.getElementById('fQty').value   = item.qty;
+  document.getElementById('fLow').value   = item.lowStock||'';
+  document.getElementById('fNote').value  = item.note||'';
+  document.getElementById('itemOverlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('itemOverlay').classList.remove('open'); }
+
+async function saveItem() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { document.getElementById('fName').focus(); return; }
+  const data = {
+    name,
+    category: document.getElementById('fCat').value,
+    unit:     document.getElementById('fUnit').value.trim() || 'ea',
+    qty:      parseInt(document.getElementById('fQty').value) || 0,
+    lowStock: parseInt(document.getElementById('fLow').value) || 0,
+    note:     document.getElementById('fNote').value.trim(),
+  };
+  if (editId) {
+    const idx = items.findIndex(i => i.id===editId);
+    if (idx>=0) items[idx] = { ...items[idx], ...data };
+  } else {
+    data.id = Date.now().toString(36) + Math.random().toString(36).slice(2);
+    items.push(data);
+  }
+  closeModal();
+  render();
+  await pushAndSave();
+  toast(editId ? 'Item updated ✓' : 'Item added ✓');
+}
+
+// ── SETUP MODAL ───────────────────────────────────────
+function openSetup() {
+  document.getElementById('scriptUrl').value = scriptUrl;
+  document.getElementById('setupOverlay').classList.add('open');
+}
+function closeSetup() { document.getElementById('setupOverlay').classList.remove('open'); }
+
+async function saveScriptUrl() {
+  const val = document.getElementById('scriptUrl').value.trim();
+  if (!val) return;
+  scriptUrl = val;
+  localStorage.setItem(SCRIPT_KEY, scriptUrl);
+  document.getElementById('setupBanner').style.display = 'none';
+  closeSetup();
+  toast('Connecting…');
+  await syncNow();
+}
+
+// ── TOAST ─────────────────────────────────────────────
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── EVENTS ────────────────────────────────────────────
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQ = e.target.value.trim();
+  render();
+});
+document.getElementById('itemOverlay').addEventListener('click', e => {
+  if (e.target===document.getElementById('itemOverlay')) closeModal();
+});
+document.getElementById('setupOverlay').addEventListener('click', e => {
+  if (e.target===document.getElementById('setupOverlay')) closeSetup();
+});
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') { closeModal(); closeSetup(); }
+});
+
+init();
 </script>
 </body>
 </html>
