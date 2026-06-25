@@ -4,7 +4,7 @@
 const SHEET_NAME = 'Inventory';
 
 function doGet(e) {
-  const action = e.parameter.action;
+  const action = (e && e.parameter && e.parameter.action) ? e.parameter.action : 'get';
   if (action === 'get') {
     return getItems();
   }
@@ -28,13 +28,13 @@ function getItems() {
   const rows  = sheet.getDataRange().getValues();
   if (rows.length <= 1) return jsonResponse({ items: [] });
   const items = rows.slice(1).map(r => ({
-    id:       r[0],
-    name:     r[1],
-    category: r[2],
-    unit:     r[3],
+    id:       String(r[0]),
+    name:     String(r[1]),
+    category: String(r[2]),
+    unit:     String(r[3]),
     qty:      Number(r[4]),
     lowStock: Number(r[5]),
-    note:     r[6],
+    note:     String(r[6] || ''),
   }));
   return jsonResponse({ items });
 }
