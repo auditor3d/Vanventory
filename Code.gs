@@ -1,22 +1,55 @@
 // Van Stock — Google Apps Script backend
-// Paste this entire file into script.google.com
+// Can be deployed from script.google.com directly — no Sheet needed first.
 
-const SHEET_NAME = 'Inventory';
+const SHEET_NAME  = 'Inventory';
+const SS_KEY      = 'vanStockSpreadsheetId';
+
+function getOrCreateSpreadsheet() {
+  const props = PropertiesService.getScriptProperties();
+  let ssId    = props.getProperty(SS_KEY);
+
+  if (ssId) {
+    try {
+      return SpreadsheetApp.openById(ssId);
+    } catch(e) {
+      // ID stored but file was deleted — create a new one
+    }
+  }
+
+  // Create a brand new spreadsheet in the user's Drive
+  const ss = SpreadsheetApp.create('Van Stock Inventory');
+  props.setProperty(SS_KEY, ss.getId());
+  return ss;
+}
+
+function getSheet() {
+  const ss    = getOrCreateSpreadsheet();
+  let   sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    // Remove default blank sheet if it exists
+    const defaultSheet = ss.getSheetByName('Sheet1');
+    if (defaultSheet && ss.getSheets().length > 1) {
+      ss.deleteSheet(defaultSheet);
+    }
+    sheet.appendRow(['id','name','category','unit','qty','lowStock','note']);
+    // Style the header row
+    sheet.getRange(1, 1, 1, 7).setFontWeight('bold').setBackground('#0d1117').setFontColor('#39ff14');
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
 
 function doGet(e) {
   const action = (e && e.parameter && e.parameter.action) ? e.parameter.action : 'get';
-  if (action === 'get') {
-    return getItems();
-  }
+  if (action === 'get') return getItems();
   return jsonResponse({ error: 'Unknown action' });
 }
 
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
-    if (payload.action === 'set') {
-      return setItems(payload.items);
-    }
+    if (payload.action === 'set') return setItems(payload.items);
     return jsonResponse({ error: 'Unknown action' });
   } catch(err) {
     return jsonResponse({ error: err.toString() });
@@ -45,22 +78,12 @@ function setItems(items) {
   sheet.appendRow(['id','name','category','unit','qty','lowStock','note']);
   if (items && items.length) {
     const rows = items.map(i => [
-      i.id, i.name, i.category, i.unit,
-      i.qty, i.lowStock, i.note || ''
+      i.id, i.name, i.category,
+      i.unit, i.qty, i.lowStock, i.note || ''
     ]);
     sheet.getRange(2, 1, rows.length, 7).setValues(rows);
   }
   return jsonResponse({ ok: true });
-}
-
-function getSheet() {
-  const ss    = SpreadsheetApp.getActiveSpreadsheet();
-  let   sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['id','name','category','unit','qty','lowStock','note']);
-  }
-  return sheet;
 }
 
 function jsonResponse(obj) {
